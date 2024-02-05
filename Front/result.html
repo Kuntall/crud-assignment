@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Result</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <ul> 
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="result.html">Result</a></li>
+        </ul>
+    </nav>
+
+    <h1>Result Page</h1>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function getUserDetails() {
+            const response = await fetch('http://localhost:8000/api/user/users', {
+      method: "GET", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      }});
+            const data = await response.json();
+
+            // Display user details in a table
+            const userTable = document.getElementById("userTable").getElementsByTagName('tbody')[0];
+
+            data.user.forEach(user => {
+                const row = userTable.insertRow();
+                row.insertCell(0).innerHTML = user.name;
+                row.insertCell(1).innerHTML = user.email;
+                row.insertCell(2).innerHTML = user.mobile;
+
+                // Add Edit and Delete buttons
+                const editCell = row.insertCell(3);
+                editCell.innerHTML = '<button onclick="editUser()">Edit</button>';
+
+                const deleteCell = row.insertCell(4);
+                deleteCell.innerHTML = '<button onclick="deleteUser()">Delete</button>';
+            });
+        }
+
+        // Call the function when the page loads
+        window.onload = getUserDetails;
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Home</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="result.html">Result</a></li>
+        </ul>
+    </nav>
+
+    <h1>Welcome to User Management System</h1>
+
+    <form id="registrationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="mobile">Mobile:</label>
+        <input type="text" id="mobile" name="mobile" required><br>
+
+        <button type="button" onclick="registerUser()">Register</button>
+    </form>
+
+    <div id="registrationResult"></div>
+
+    <script>
+        async function registerUser() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const mobile = document.getElementById("mobile").value;
+
+            const response = await fetch('http://localhost:8000/api/user/register', {
+                method: 'POST',
+                mode: "cors", // no-cors, *cors, same-origin
+                credentials: "same-origin",
+                redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                    mobile,
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            // Display the registration result
+            const registrationResult = document.getElementById("registrationResult");
+            registrationResult.innerHTML = `<p>${data.message}</p>`;
+
+            // You can redirect to the result page or perform other actions based on the response.
+        }
+    </script>
+
+</body>
+</html>
